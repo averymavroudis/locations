@@ -1,5 +1,4 @@
 library(dbscan)
-library(utils)
 
 clustering <- function(locations) {
   locations <- na.omit(locations)
