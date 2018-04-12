@@ -8,6 +8,8 @@ output: html_document
 library(dbscan)
 library(leaflet)
 library(htmltools)
+library(DT)
+
 locations <- read.csv("./locations.csv")
 locations <- na.omit(locations)
 
@@ -21,17 +23,26 @@ mapping <- function(locations){
   colors <- rainbow(length(clusters) - 1)
   colors <- c('#000000FF', colors)
 
-  clusterLatLeaflet <- with(locations[locations$cluster != 0,], tapply(Latitude, cluster, mean))
-  clusterLonLeaflet <-with(locations[locations$cluster != 0,], tapply(Longitude, cluster, mean))
+  clusterLatLeaflet <- with(locations[locations$cluster != 0, ], tapply(latitude, cluster, mean))
+  clusterLonLeaflet <- with(locations[locations$cluster != 0, ], tapply(longitude, cluster, mean))
   
+  if (length(clusterLonLeaflet) != length(clusterLatLeaflet)){
+    print(locations$id[1])
+  }
+  if (length(clusterLonLeaflet) == 0){
+    result <- div("Location Inconclusive")
+  } else {
   m <- leaflet(locations) %>%
     addProviderTiles(providers$CartoDB.Positron) %>%
-    addCircleMarkers(lat = ~Latitude, lng = ~Longitude, color = colors[locations$cluster + 1L], label = ~City, stroke = FALSE) %>%
+    addCircleMarkers(lat = ~latitude, lng = ~longitude, color = colors[locations$cluster + 1L], stroke = FALSE) %>%
     addCircleMarkers(lat = clusterLatLeaflet, lng = clusterLonLeaflet, color = colors[-1], stroke = FALSE, radius = 50, fillOpacity = 0.3)
-  
-  div(h1(paste("User",locations$UserId[1])), m)
+    df <- as.data.frame(table(db$cluster)) 
+    table <- datatable(df)
+    result <- div(m, table)
 }
+  div(h1(paste("ID:",locations$id[1])), result)
+} 
 
-htmltools::tagList(lapply(split(locations,locations$UserId), mapping))
+htmltools::tagList(lapply(split(locations,locations$id), mapping))
 
 ```
