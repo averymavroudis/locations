@@ -25,7 +25,7 @@ mapping <- function(locations){
   clusterLatLeaflet <- with(locations[locations$cluster != 0,], tapply(Latitude, cluster, mean))
   clusterLonLeaflet <-with(locations[locations$cluster != 0,], tapply(Longitude, cluster, mean))
   
-  m <- leaflet(locations) %>%
+  leaflet(locations) %>%
     addProviderTiles(providers$CartoDB.Positron) %>%
     addCircleMarkers(lat = ~Latitude, lng = ~Longitude, color = colors[locations$cluster + 1L], label = ~City, stroke = FALSE) %>%
     addCircleMarkers(lat = clusterLatLeaflet, lng = clusterLonLeaflet, color = colors[-1], stroke = FALSE, radius = 50, fillOpacity = 0.3)
