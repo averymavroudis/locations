@@ -29,6 +29,7 @@ mapping <- function(locations){
   if (length(clusterLonLeaflet) != length(clusterLatLeaflet)){
     print(locations$id[1])
   }
+
   if (length(clusterLonLeaflet) == 0){
     result <- div("Location Inconclusive")
   } else {
@@ -36,10 +37,18 @@ mapping <- function(locations){
     addProviderTiles(providers$CartoDB.Positron) %>%
     addCircleMarkers(lat = ~latitude, lng = ~longitude, color = colors[locations$cluster + 1L], stroke = FALSE) %>%
     addCircleMarkers(lat = clusterLatLeaflet, lng = clusterLonLeaflet, color = colors[-1], stroke = FALSE, radius = 50, fillOpacity = 0.3)
+  
     df <- as.data.frame(table(db$cluster)) 
-    table <- datatable(df)
+    if (is.element(0,df$Var1)){
+      color <- colors
+    } else {
+      color <- rainbow(length(clusters) - 1)
+    }
+    Color <- as.list(color)
+    table <- cbind(df, color)
+    table <- datatable(table, colnames = c("Cluster","Frequency","Color"), rownames = FALSE)
     result <- div(m, table)
-}
+  }
   div(h1(paste("ID:",locations$id[1])), result)
 } 
 
