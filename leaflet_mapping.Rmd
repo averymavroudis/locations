@@ -1,0 +1,36 @@
+---
+title: "leaflet_mapping"
+author: "Avery Mavroudis"
+date: "4/10/2018"
+output: html_document
+---
+```{r}
+library(dbscan)
+library(leaflet)
+locations <- read.csv("./locations.csv")
+locations <- na.omit(locations)
+```
+
+```{r}
+mapping <- function(locations){
+  db <- dbscan(locations[,2:3], eps = 0.1)
+  locations$cluster <- db$cluster
+
+  if (!is.element(0, locations)) {
+    leafletClusters <- c(0, locations)
+  }
+  colors <- rainbow(length(leafletClusters) - 1)
+  colors <- c('#000000', colors)
+
+  clusterLatLeaflet <- with(locations[locations$cluster != 0,], tapply(Latitude, cluster, mean))
+  clusterLonLeaflet <-with(locations[locations$cluster != 0,], tapply(Longitude, cluster, mean))
+  
+  m <- leaflet(locations) %>%
+    addProviderTiles(providers$CartoDB.Positron) %>%
+    addCircleMarkers(lat = ~Latitude, lng = ~Longitude, color = colors[locations$cluster + 1L], label = ~City, stroke = FALSE) %>%
+    addCircleMarkers(lat = clusterLatLeaflet, lng = clusterLonLeaflet, color = colors[-1], stroke = FALSE, radius = 50, fillOpacity = 0.3)
+}
+
+htmltools::tagList(lapply(split(locations,locations$UserId), mapping))
+
+```
