@@ -4,31 +4,32 @@ author: "Avery Mavroudis"
 date: "4/10/2018"
 output: html_document
 ---
-```{r}
+```{r, echo = F}
 library(dbscan)
 library(leaflet)
+library(htmltools)
 locations <- read.csv("./locations.csv")
 locations <- na.omit(locations)
-```
 
-```{r}
 mapping <- function(locations){
   db <- dbscan(locations[,2:3], eps = 0.1)
   locations$cluster <- db$cluster
-
-  if (!is.element(0, locations)) {
-    leafletClusters <- c(0, locations)
+  clusters <- unique(db$cluster)
+  if (!is.element(0, clusters)) {
+    clusters <- c(0, clusters)
   }
-  colors <- rainbow(length(leafletClusters) - 1)
-  colors <- c('#000000', colors)
+  colors <- rainbow(length(clusters) - 1)
+  colors <- c('#000000FF', colors)
 
   clusterLatLeaflet <- with(locations[locations$cluster != 0,], tapply(Latitude, cluster, mean))
   clusterLonLeaflet <-with(locations[locations$cluster != 0,], tapply(Longitude, cluster, mean))
   
-  leaflet(locations) %>%
+  m <- leaflet(locations) %>%
     addProviderTiles(providers$CartoDB.Positron) %>%
     addCircleMarkers(lat = ~Latitude, lng = ~Longitude, color = colors[locations$cluster + 1L], label = ~City, stroke = FALSE) %>%
     addCircleMarkers(lat = clusterLatLeaflet, lng = clusterLonLeaflet, color = colors[-1], stroke = FALSE, radius = 50, fillOpacity = 0.3)
+  
+  div(h1(paste("User",locations$UserId[1])), m)
 }
 
 htmltools::tagList(lapply(split(locations,locations$UserId), mapping))
