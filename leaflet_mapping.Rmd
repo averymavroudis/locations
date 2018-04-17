@@ -9,9 +9,15 @@ library(dbscan)
 library(leaflet)
 library(htmltools)
 library(DT)
+library(plotrix)
+library(dplyr)
 
 locations <- read.csv("./locations.csv")
 locations <- na.omit(locations)
+
+foo <- function(color){
+      as.character(div(style = paste("background-color:",color,";height:15px;width:15px")))
+}
 
 mapping <- function(locations){
   db <- dbscan(locations[,2:3], eps = 0.1)
@@ -40,13 +46,13 @@ mapping <- function(locations){
   
     df <- as.data.frame(table(db$cluster)) 
     if (is.element(0,df$Var1)){
-      color <- colors
+      colors <- colors
     } else {
-      color <- rainbow(length(clusters) - 1)
+      colors <- colors[-1]
     }
-    Color <- as.list(color)
-    table <- cbind(df, color)
-    table <- datatable(table, colnames = c("Cluster","Frequency","Color"), rownames = FALSE)
+    
+    table <- cbind(df, as.vector(sapply(colors,foo, simplify = "array")))
+    table <- datatable(table, colnames = c("Cluster","Frequency","Color"), rownames= FALSE, escape = FALSE)
     result <- div(m, table)
   }
   div(h1(paste("ID:",locations$id[1])), result)
