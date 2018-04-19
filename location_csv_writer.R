@@ -13,6 +13,6 @@ locationsCSV <- function(data, fileName = ""){
   lon <- unlist(data[, 3])
   data <- as.data.frame(cbind(lat, lon))
   setDT(data, keep.rownames = TRUE)
-  colnames(data) <- c("UserID", "Latitude", "Longitude")
+  colnames(data) <- c("id", "latitude", "longitude")
   write.csv(data, file = fileName, row.names = FALSE)
 }
