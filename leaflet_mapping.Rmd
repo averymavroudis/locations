@@ -1,5 +1,5 @@
 ---
-title: "leaflet_mapping"
+title: "Clustering Locations"
 author: "Avery Mavroudis"
 date: "4/10/2018"
 output: html_document
