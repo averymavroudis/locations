@@ -9,13 +9,11 @@ library(dbscan)
 library(leaflet)
 library(htmltools)
 library(DT)
-library(plotrix)
-library(dplyr)
 
-locations <- read.csv("./locations.csv")
+locations <- read.csv("./data/locations.csv")
 locations <- na.omit(locations)
 
-foo <- function(color){
+clusterColor <- function(color){
       as.character(div(style = paste("background-color:",color,";height:15px;width:15px")))
 }
 
@@ -51,7 +49,7 @@ mapping <- function(locations){
       colors <- colors[-1]
     }
     
-    table <- cbind(df, as.vector(sapply(colors,foo, simplify = "array")))
+    table <- cbind(df, as.vector(sapply(colors,clusterColor, simplify = "array")))
     table <- datatable(table, colnames = c("Cluster","Frequency","Color"), rownames= FALSE, escape = FALSE)
     result <- div(m, table)
   }
