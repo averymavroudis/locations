@@ -1,7 +1,5 @@
 # Location Clustering
- 
- This **README** will explain the variety of tools and methods of the `locations` repository by **averymavroudis**.
-
+![Shiny_preview.png](./Shiny_preview.png)
 ## The Problem
 Suppose you have coordinate data of many different geo located events, objects, people, etc. that are grouped by an ID. We'd like to predict the region where the next event is most likely to happen or determine the centrality of events by frequency. 
 
@@ -201,7 +199,6 @@ This shiny app could either be used on your browser or within a new window in R.
 
 Once you launch the app, you will be able to choose an ID from a drop down menu.
 
-![Shiny_preview.png](./Shiny_preview.png)
 On the right side, there will be a map with all of their location points and a frequency table with a color legend. Black will always be the outlier points while the color points accompany different clusters. 
 
 On the left side, the adjustable sliders allow you to increase and decrease the radius of which the clusters are determined and the number of points needed to be considered a cluster (default: Clustering Radius = 0.1, Min Points = 5, ID = first ID in CSV)
