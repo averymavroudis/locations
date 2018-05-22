@@ -211,7 +211,7 @@ This markdown document will give you everything the Shiny app above will without
 
 In order to change the radius with which the clusters are determined, under the `mapping` function you will need to change the `eps = 0.1` parameter to whatever number you choose within the `dbscan` function. `minPts` is a default argument of `dbscan` with a value of 5, but if you would like to consider clusters of smaller or larger sizes you will need to include `minPts = ` as a parameter.
 
-##Future Plans for locations repo
+## Future Plans for locations repo
 1. Compare and implement other clustering methods which might better suit a variety of data types _(What if a Density Based Scan isn't the best method for your data? What other factors are influencing location?)_
 2. Rereate this repo with Python code
 3. Consider other types of customizable attributes to data for Shiny app
