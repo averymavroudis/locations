@@ -6,7 +6,8 @@
 Suppose you have coordinate data of many different geo located events, objects, people, etc. that are grouped by an ID. We'd like to predict the region where the next event is most likely to happen or determine the centrality of events by frequency. 
 
 ## The Method
-### Skip this section if you have previous experience working with machine learning algorithms or have deep familiarity with clustering.
+__Skip this section if you have previous experience working with machine learning algorithms or have deep familiarity with clustering.__
+
 A __DBSCAN__ algorithm is used for clustering for all location data (**D**ensity-**B**a**S**ed **C**lustering of **A**pplications with **N**oise). 
 
 I chose to use this particular one in comparison to K-Means and KNN (**K** **N**earest **N**eighbors) versus other algorithms for the following reasons. 
@@ -35,8 +36,11 @@ locations <- read.csv("./data/locations_sample.csv")
 ```
 This is what your data should look like when you preview it. We'll use these three ID's (70, 53535, 254478) to show the progression of output. 
 
-```
+```R
 locations
+```
+
+```
           id latitude longitude
 1         70 35.74817 -78.74851          
 .
@@ -56,8 +60,11 @@ locations
 
 However, you can see that when using `clustering` on the entire `locations` CSV, you will have an unexpected amount of clusters because it assumes all of the data belong to one ID. 
 
-```
+```R
 clustering(locations)
+```
+
+```
 	clusterNumber clusterDensity clusterLatitudes clusterLongitudes
 1              2          13507         35.75463         -78.70162
 2              3             13         35.21638         -80.83132
@@ -98,6 +105,9 @@ If your CSV has many ID's like mine, you may utilize the `split` function to bre
 ```R
 data_by_id <- split(locations, locations$id)
 data_by_id
+```
+
+```
 $`70`
           id latitude longitude
 1         70 35.74817 -78.74851
@@ -124,12 +134,12 @@ $`254478`
 ```
 Once we've done this, we can use the `lapply` function to apply `clustering` to each ID.
 
-```
+```R
 lapply(data_by_id, clustering)
 ```
 __OR__ you could do this **all in one line** _without having to initialize the list of coordinates by ID._
 
-```
+```R
 lapply(split(locations, locations$id), clustering)
 ```
 Either way, you will have identical output as shown below.
@@ -165,13 +175,13 @@ This great function does all the work of `clustering`, picking the highest densi
 
 To use this handy tool, you simply put the name of your initialized CSV of locations (like we used above) and input a file name for the CSV output. The CSV will save to your current working directory if you do not include the file path in the `fileName`.
 
-```
+```R
 locations <- read.csv("./data/locations_sample.csv")
 locationsCSV(locations, fileName = "primary_locations.csv")
 ```
 Voìla! Check your files! It should look like this should you chose to open it in a text editor:
 
-```
+```csv
 "id","latitude","longitude"
 "70",35.8105249460526,-78.7081555368421
 .
