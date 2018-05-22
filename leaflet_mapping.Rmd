@@ -10,7 +10,7 @@ library(leaflet)
 library(htmltools)
 library(DT)
 
-locations <- read.csv("./data/locations.csv")
+locations <- read.csv("./data/locations_sample.csv")
 locations <- na.omit(locations)
 
 clusterColor <- function(color){
