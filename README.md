@@ -1,12 +1,12 @@
-#Location Clustering
+# Location Clustering
  
  This **README** will explain the variety of tools and methods of the `locations` repository by **averymavroudis**.
 
-##The Problem
+## The Problem
 Suppose you have coordinate data of many different geo located events, objects, people, etc. that are grouped by an ID. We'd like to predict the region where the next event is most likely to happen or determine the centrality of events by frequency. 
 
-##The Method
-###Skip this section if you have previous experience working with machine learning algorithms or have deep familiarity with clustering.
+## The Method
+### Skip this section if you have previous experience working with machine learning algorithms or have deep familiarity with clustering.
 A __DBSCAN__ algorithm is used for clustering for all location data (**D**ensity-**B**a**S**ed **C**lustering of **A**pplications with **N**oise). 
 
 I chose to use this particular one in comparison to K-Means and KNN (**K** **N**earest **N**eighbors) versus other algorithms for the following reasons. 
@@ -19,13 +19,13 @@ I chose to use this particular one in comparison to K-Means and KNN (**K** **N**
 	- Declares outliers as the points in lower-density and/or farther regions (and puts them in an outlier "cluster")
 	- Clusters may be geometrically shaped (versus typical cell shape of K clusters)
 
-##The Code
+## The Code
 Below is a glimpse of each code in the repository, how and what it is used for, and a general guide to use.
 
-###`init.R`
+### `init.R`
 This R script is sourced in other scripts purely for the purpose of installing preliminary packages **only if** you do not already have them in your R list of packages. It does not have any operational use other than to prepare other files for screecreenshouse. 
 
-###`clustering.R`
+### `clustering.R`
 If used as a standalone function, clustering returns a list of information when you input a CSV file with ID, Latitude, and Longitude.
 
 Unfortunately, it does not parse the CSV by ID. If you have a CSV with many different ID's as such, you will get have clustered generated with all of the data in the CSV.
@@ -160,7 +160,7 @@ $`254478`
 ```
 Whenever there is __no data__ for an ID like ``` $`254478` ``` above, it means that there are not enough points to determine a cluster. With `clustering`, you need *at least* 5 points in the same region (close enough together to not be considered an outlier) to make a cluster. 
 
-###`location_csv_writer.R`
+### `location_csv_writer.R`
 This great function does all the work of `clustering`, picking the highest density cluster for you and wrapping it up in convenient CSV. This function **DOES** parse by ID, so there is no need to use `split` or `lapply` here. The output will be a list of IDs with the coordinate of the most dense cluster next to it.
 
 To use this handy tool, you simply put the name of your initialized CSV of locations (like we used above) and input a file name for the CSV output. The CSV will save to your current working directory if you do not include the file path in the `fileName`.
@@ -185,7 +185,7 @@ Voìla! Check your files! It should look like this should you chose to open it i
 ```
 Notice that the ID that does not return any data in `clustering` above does not appear on the CSV.
 
-###`shiny_cluster/app.R`
+### `shiny_cluster/app.R`
 
 This shiny app could either be used on your browser or within a new window in R. To input your own data, all you need to do is input the name of the CSV where I have `sampleLocations` being read.
 
@@ -198,7 +198,7 @@ On the left side, the adjustable sliders allow you to increase and decrease the 
 
 This application is an easy to use version of the markdown file below.
 
-###`leaflet_mapping.Rmd`
+### `leaflet_mapping.Rmd`
 
 This markdown document will give you everything the Shiny app above will without the customizable sliders. When you press the "knit" button in the toolbar below the file name, you will be given a list of every user with their accompanying map and frequency table. If the user does not have enough points (in our case, less than 5), then below the ID will say "Location Inconclusive". 
 
