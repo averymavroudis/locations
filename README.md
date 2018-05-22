@@ -1,5 +1,5 @@
 # Location Clustering
-![Shiny_preview.png](./Shiny_preview.png)
+![shinyApp_preview.png](./shinyApp_preview.png)
 ## The Problem
 Suppose you have coordinate data of many different geo located events, objects, people, etc. that are grouped by an ID. We'd like to predict the region where the next event is most likely to happen or determine the centrality of events by frequency. 
 
